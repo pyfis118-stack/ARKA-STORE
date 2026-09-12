@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARKA STORE — магазин одежды</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0B0D;
+    --bg-soft: #17161C;
+    --paper: #FFFFFF;
+    --paper-dim: #E9E7ED;
+    --ink: #111114;
+    --ink-soft: #8B8995;
+    --accent: #8B5CF6;
+    --accent-dim: #5B21B6;
+    --line: rgba(255,255,255,0.14);
+    --radius-arch: 999px 999px 0 0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Work Sans',sans-serif;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  ::selection{background:var(--accent);color:var(--ink);}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:relative;
+    padding:56px 0 40px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .arch-deco{
+    position:absolute;
+    top:-40px; right:-60px;
+    width:340px; height:340px;
+    border:2px solid var(--line);
+    border-radius:999px 999px 0 0;
+    pointer-events:none;
+  }
+  .arch-deco::after{
+    content:"";
+    position:absolute;
+    top:40px; left:40px; right:40px; bottom:-40px;
+    border:2px solid rgba(139,92,246,0.28);
+    border-radius:999px 999px 0 0;
+  }
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:24px;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:1;
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand .word{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(64px,11vw,116px);
+    line-height:0.82;
+    letter-spacing:1px;
+    color:var(--paper);
+  }
+  .brand .sub{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(20px,3vw,30px);
+    letter-spacing:8px;
+    color:var(--accent);
+    margin-left:4px;
+  }
+  .tagline{
+    max-width:280px;
+    font-size:15px;
+    color:var(--ink-soft);
+    padding-top:14px;
+  }
+  .tg-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--accent);
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 22px;
+    border-radius:999px;
+    white-space:nowrap;
+    transition:transform .15s ease, background .15s ease;
+    border:none;
+    cursor:pointer;
+  }
+  .tg-btn:hover{background:#A78BFA; transform:translateY(-2px);}
+  .tg-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+  /* ---------- CONTROLS ---------- */
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;
+    gap:8px;
+    padding:22px 0 0;
+    border-bottom:1px solid var(--line);
+  }
+  .tab-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-family:'Work Sans',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:10px 4px 14px;
+    margin-right:22px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .tab-btn.active{color:var(--paper);border-bottom-color:var(--accent);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .home-hero{
+    padding:64px 0 76px;
+    max-width:520px;
+  }
+  .home-lead{
+    font-size:19px;
+    color:var(--paper);
+    line-height:1.6;
+    margin:0 0 28px;
+  }
+  .home-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+
+  .controls{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    padding:32px 0 8px;
+    flex-wrap:wrap;
+  }
+  .search-box{
+    flex:1 1 320px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    color:var(--paper);
+    font-family:'Work Sans',sans-serif;
+    font-size:16px;
+    padding:15px 18px 15px 46px;
+    border-radius:12px;
+    outline:none;
+    transition:border-color .15s ease;
+  }
+  .search-box input:focus{border-color:var(--accent);}
+  .search-box input::placeholder{color:var(--ink-soft);}
+  .search-box svg{
+    position:absolute; left:16px; top:50%; transform:translateY(-50%);
+    width:18px;height:18px; color:var(--ink-soft); pointer-events:none;
+  }
+  .add-toggle{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    font-family:'Work Sans',sans-serif;
+    font-weight:600;
+    font-size:12px;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .add-toggle:hover{background:var(--paper);color:var(--ink);border-color:var(--paper);}
+  .result-count{
+    width:100%;
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-top:4px;
+  }
+
+  /* ---------- ADD FORM ---------- */
+  .add-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .add-panel.open{max-height:900px;}
+  .add-card{
+    margin:20px 0 8px;
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:20px;
+    padding:28px;
+  }
+  .add-card h2{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:28px;
+    letter-spacing:1px;
+    margin:0 0 18px;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns:200px 1fr;
+    gap:22px;
+  }
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+  .photo-drop{
+    aspect-ratio:1/1;
+    border:2px dashed var(--ink-soft);
+    border-radius:var(--radius-arch);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    font-size:13px;
+    text-align:center;
+    overflow:hidden;
+    position:relative;
+    background:var(--paper-dim);
+  }
+  .photo-drop img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+  .photo-drop svg{width:26px;height:26px;}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .field label{font-size:13px;font-weight:600;color:var(--ink-soft);}
+  .field input, .field textarea, .field select{
+    font-family:'Work Sans',sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(27,24,16,0.18);
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    resize:vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{border-color:var(--accent-dim);}
+  .form-actions{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    font-weight:600;
+    font-size:15px;
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .btn-primary:hover{background:#000;}
+  .btn-ghost{
+    background:transparent;
+    border:1px solid rgba(27,24,16,0.25);
+    color:var(--ink);
+    font-weight:600;
+    font-size:15px;
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .form-msg{font-size:13px;margin-top:10px;color:var(--accent-dim);font-weight:600;}
+
+  /* ---------- GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:26px;
+    padding:32px 0 80px;
+  }
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:20px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .card-photo{
+    aspect-ratio:4/5;
+    background:var(--paper-dim);
+    border-radius:var(--radius-arch);
+    margin:14px 14px 0;
+    overflow:hidden;
+    position:relative;
+  }
+  .card-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card-photo .ph{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft); font-size:13px;
+  }
+  .del-btn{
+    position:absolute; top:8px; right:8px;
+    width:28px;height:28px;
+    border-radius:50%;
+    border:none;
+    background:rgba(27,24,16,0.55);
+    color:#fff;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+    line-height:1;
+  }
+  .del-btn:hover{background:var(--accent-dim);}
+  .card-body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card-cat{font-size:11px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;}
+  .card-title{font-size:17px;font-weight:600;color:var(--paper);}
+  .card-desc{font-size:13.5px;color:var(--ink-soft);flex:1;}
+  .card-price{font-size:18px;font-weight:700;color:var(--paper);margin-top:4px;}
+
+  .empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:70px 20px;
+    color:var(--ink-soft);
+  }
+  .empty svg{width:44px;height:44px;margin-bottom:14px;color:var(--accent);}
+  .empty p{font-size:16px;max-width:340px;margin:0 auto;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 40px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  footer a{color:var(--paper);text-decoration:none;font-weight:600;}
+
+  .float-tg{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:50;
+  }
+  @media(max-width:560px){
+    .float-tg{right:14px;bottom:14px;}
+    .float-tg .tg-btn span{display:none;}
+    .float-tg .tg-btn{padding:16px;border-radius:50%;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.72);
+    z-index:200;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:18px;
+    padding:26px;
+    width:100%;
+    max-width:340px;
+    border-top:3px solid var(--accent);
+  }
+  .modal-box h3{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:24px;
+    letter-spacing:0.5px;
+    margin:0 0 6px;
+  }
+  .modal-box p{font-size:14px;color:var(--ink-soft);margin:0 0 16px;}
+  .modal-box input{
+    width:100%;
+    font-family:'Work Sans',sans-serif;
+    font-size:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(17,17,20,0.18);
+    outline:none;
+    margin-bottom:8px;
+  }
+  .modal-box input:focus{border-color:var(--accent-dim);}
+  .modal-error{
+    color:#B91C1C;
+    font-size:13px;
+    font-weight:600;
+    min-height:18px;
+    margin-bottom:6px;
+  }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:8px;
+  }
+  .modal-actions .btn-primary, .modal-actions .btn-ghost{
+    padding:10px 18px;
+    font-size:14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="arch-deco"></div>
+    <div class="top-row">
+      <div class="brand">
+        <div class="word">ARKA</div>
+        <div class="sub">STORE</div>
+        <div class="tagline">Одежда, которую выкладываем сами — заходи, ищи и пиши, если приглянулось.</div>
+      </div>
+      <a class="tg-btn" href="https://t.me/arkastorekz" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-1 .4-1 1.7.1 2l4.8 1.5 1.9 5.8c.2.6 1 .8 1.4.3l2.6-2.8 4.9 3.6c.7.5 1.7.1 1.9-.7l3.3-15.4c.2-1-.8-1.8-1.7-1.8Zm-4 3.6-8.3 7.5-.3 3.1-1.5-4.6 9.3-6.6c.3-.2.6.2.3.4l-7.8 7c-.1.1-.2.3-.1.5l.4 3.7Z"/></svg>
+        Написать в Telegram
+      </a>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="home" type="button">Главная</button>
+    <button class="tab-btn" data-tab="shop" type="button">Одежда</button>
+  </div>
+
+  <div class="tab-panel active" id="homeTab">
+    <div class="home-hero">
+      <p class="home-lead">Вся одежда, которую мы выкладываем, собирается во вкладке «Одежда» — там поиск, фото и цена каждой вещи. Понравилось — пишите в Telegram.</p>
+      <div class="home-actions">
+        <button class="btn-primary" id="goShop" type="button">Смотреть одежду</button>
+        <a class="tg-btn" href="https://t.me/arkastorekz" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-1 .4-1 1.7.1 2l4.8 1.5 1.9 5.8c.2.6 1 .8 1.4.3l2.6-2.8 4.9 3.6c.7.5 1.7.1 1.9-.7l3.3-15.4c.2-1-.8-1.8-1.7-1.8Zm-4 3.6-8.3 7.5-.3 3.1-1.5-4.6 9.3-6.6c.3-.2.6.2.3.4l-7.8 7c-.1.1-.2.3-.1.5l.4 3.7Z"/></svg>
+          Написать в Telegram
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="shopTab">
+  <div class="controls">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.6" y2="16.6"/></svg>
+      <input id="searchInput" type="text" placeholder="Найти по названию, категории или описанию…">
+    </div>
+    <button class="add-toggle" id="toggleAdd">Админ · добавить товар</button>
+    <div class="result-count" id="resultCount"></div>
+  </div>
+
+  <div class="add-panel" id="addPanel">
+    <div class="add-card">
+      <h2>Новый товар</h2>
+      <form id="productForm">
+        <div class="form-grid">
+          <label class="photo-drop" id="photoDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><polyline points="7 9 12 4 17 9"/><line x1="12" y1="4" x2="12" y2="16"/></svg>
+            <span id="photoHint">Загрузить фото</span>
+            <input type="file" id="photoInput" accept="image/*" style="display:none;">
+          </label>
+          <div>
+            <div class="field">
+              <label for="titleInput">Название</label>
+              <input id="titleInput" type="text" placeholder="Например: Худи оверсайз чёрное">
+            </div>
+            <div class="field">
+              <label for="categoryInput">Категория</label>
+              <select id="categoryInput">
+                <option value="Верх">Верх</option>
+                <option value="Низ">Низ</option>
+                <option value="Обувь">Обувь</option>
+                <option value="Аксессуары">Аксессуары</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="priceInput">Цена, ₸</label>
+              <input id="priceInput" type="number" min="0" placeholder="12000">
+            </div>
+            <div class="field">
+              <label for="descInput">Описание</label>
+              <textarea id="descInput" rows="3" placeholder="Размер, материал, состояние…"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" id="publishBtn" class="btn-primary">Опубликовать товар</button>
+          <button type="button" class="btn-ghost" id="cancelAdd">Отмена</button>
+        </div>
+        <div class="form-msg" id="formMsg"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  </div>
+
+  <footer>
+    <span>ARKA STORE — каталог одежды</span>
+    <a href="https://t.me/arkastorekz" target="_blank" rel="noopener">t.me/arkastorekz</a>
+  </footer>
+</div>
+
+<div class="float-tg">
+  <a class="tg-btn" href="https://t.me/arkastorekz" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-1 .4-1 1.7.1 2l4.8 1.5 1.9 5.8c.2.6 1 .8 1.4.3l2.6-2.8 4.9 3.6c.7.5 1.7.1 1.9-.7l3.3-15.4c.2-1-.8-1.8-1.7-1.8Zm-4 3.6-8.3 7.5-.3 3.1-1.5-4.6 9.3-6.6c.3-.2.6.2.3.4l-7.8 7c-.1.1-.2.3-.1.5l.4 3.7Z"/></svg>
+    <span>Telegram</span>
+  </a>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <h3 id="modalTitle">Пароль продавца</h3>
+    <p id="modalText">Введите пароль, чтобы добавлять или удалять товары.</p>
+    <input type="password" id="modalInput" placeholder="Пароль" autocomplete="off">
+    <div class="modal-error" id="modalError"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="modalCancel" type="button">Отмена</button>
+      <button class="btn-primary" id="modalConfirm" type="button">Войти</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PASSWORD = '12890';
+let isAdmin = false;
+let products = [];
+let pendingPhoto = null;
+
+const grid = document.getElementById('grid');
+const searchInput = document.getElementById('searchInput');
+const resultCount = document.getElementById('resultCount');
+const toggleAdd = document.getElementById('toggleAdd');
+const addPanel = document.getElementById('addPanel');
+const cancelAdd = document.getElementById('cancelAdd');
+const productForm = document.getElementById('productForm');
+const photoDrop = document.getElementById('photoDrop');
+const photoInput = document.getElementById('photoInput');
+const photoHint = document.getElementById('photoHint');
+const formMsg = document.getElementById('formMsg');
+
+const modalOverlay = document.getElementById('modalOverlay');
+const modalTitle = document.getElementById('modalTitle');
+const modalText = document.getElementById('modalText');
+const modalInput = document.getElementById('modalInput');
+const modalError = document.getElementById('modalError');
+const modalCancel = document.getElementById('modalCancel');
+const modalConfirm = document.getElementById('modalConfirm');
+let modalMode = 'password';
+let modalResolve = null;
+
+function openModal(mode, opts){
+  modalMode = mode;
+  modalError.textContent = '';
+  if (mode === 'password'){
+    modalTitle.textContent = 'Пароль продавца';
+    modalText.textContent = 'Введите пароль, чтобы добавлять или удалять товары.';
+    modalInput.style.display = 'block';
+    modalInput.value = '';
+    modalConfirm.textContent = 'Войти';
+  } else {
+    modalTitle.textContent = opts.title || 'Подтвердите действие';
+    modalText.textContent = opts.text || '';
+    modalInput.style.display = 'none';
+    modalConfirm.textContent = opts.confirmLabel || 'Да, удалить';
+  }
+  modalOverlay.classList.add('open');
+  if (mode === 'password') setTimeout(() => modalInput.focus(), 50);
+  return new Promise(resolve => { modalResolve = resolve; });
+}
+function closeModal(result){
+  modalOverlay.classList.remove('open');
+  if (modalResolve) modalResolve(result);
+  modalResolve = null;
+}
+modalCancel.addEventListener('click', () => closeModal(null));
+modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(null); });
+modalConfirm.addEventListener('click', () => {
+  if (modalMode === 'password'){
+    if (modalInput.value === ADMIN_PASSWORD){
+      closeModal(true);
+    } else {
+      modalError.textContent = 'Неверный пароль.';
+      modalInput.value = '';
+      modalInput.focus();
+    }
+  } else {
+    closeModal(true);
+  }
+});
+modalInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') modalConfirm.click(); });
+
+toggleAdd.addEventListener('click', async () => {
+  if (!isAdmin){
+    const ok = await openModal('password');
+    if (!ok) return;
+    isAdmin = true;
+    render();
+  }
+  addPanel.classList.toggle('open');
+  toggleAdd.textContent = addPanel.classList.contains('open') ? '– Скрыть форму' : 'Админ · добавить товар';
+});
+cancelAdd.addEventListener('click', () => {
+  addPanel.classList.remove('open');
+  toggleAdd.textContent = 'Админ · добавить товар';
+  productForm.reset();
+  resetPhoto();
+});
+
+photoDrop.addEventListener('click', () => photoInput.click());
+photoInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 800;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      pendingPhoto = canvas.toDataURL('image/jpeg', 0.72);
+      photoDrop.innerHTML = '<img src="' + pendingPhoto + '" alt="">';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function resetPhoto(){
+  pendingPhoto = null;
+  photoDrop.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><polyline points="7 9 12 4 17 9"/><line x1="12" y1="4" x2="12" y2="16"/></svg>
+    <span>Загрузить фото</span>`;
+  photoInput.value = '';
+}
+
+async function storageGet(key){
+  if (typeof window.storage !== 'undefined'){
+    try{
+      const res = await window.storage.get(key, true);
+      if (res && res.value) return res.value;
+    }catch(e){ /* try next */ }
+  }
+  try{
+    return localStorage.getItem(key);
+  }catch(e){
+    return null;
+  }
+}
+
+async function storageSet(key, value){
+  let ok = false;
+  if (typeof window.storage !== 'undefined'){
+    try{
+      await window.storage.set(key, value, true);
+      ok = true;
+    }catch(e){ /* try next */ }
+  }
+  try{
+    localStorage.setItem(key, value);
+    ok = true;
+  }catch(e){ /* ignore */ }
+  return ok;
+}
+
+async function loadProducts(){
+  try{
+    const raw = await storageGet('arka_products');
+    products = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    products = [];
+  }
+  render();
+}
+
+async function saveProducts(){
+  return await storageSet('arka_products', JSON.stringify(products));
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function render(){
+  const q = searchInput.value.trim().toLowerCase();
+  const filtered = products.filter(p => {
+    if (!q) return true;
+    return (p.title + ' ' + p.category + ' ' + p.description).toLowerCase().includes(q);
+  }).sort((a,b) => b.createdAt - a.createdAt);
+
+  resultCount.textContent = q
+    ? `Найдено: ${filtered.length}`
+    : `Всего товаров: ${products.length}`;
+
+  if (filtered.length === 0){
+    grid.innerHTML = `
+      <div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.6" y2="16.6"/></svg>
+        <p>${q ? 'По этому запросу пока ничего нет. Попробуйте другое слово.' : 'Пока нет товаров — нажмите «Добавить товар» и загрузите первую вещь.'}</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="card" data-id="${p.id}">
+      <div class="card-photo">
+        ${p.photo ? `<img src="${p.photo}" alt="${escapeHtml(p.title)}">` : `<div class="ph">Без фото</div>`}
+        ${isAdmin ? `<button class="del-btn" data-del="${p.id}" title="Удалить">×</button>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${escapeHtml(p.category)}</div>
+        <div class="card-title">${escapeHtml(p.title)}</div>
+        ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+        <div class="card-price">${Number(p.price).toLocaleString('ru-RU')} ₸</div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const ok = await openModal('confirm', {title:'Удалить товар?', text:'Это действие нельзя отменить.', confirmLabel:'Удалить'});
+      if (!ok) return;
+      products = products.filter(p => p.id !== btn.dataset.del);
+      await saveProducts();
+      render();
+    });
+  });
+}
+
+searchInput.addEventListener('input', render);
+
+document.getElementById('publishBtn').addEventListener('click', async () => {
+  const title = document.getElementById('titleInput').value.trim();
+  const price = document.getElementById('priceInput').value;
+  const category = document.getElementById('categoryInput').value;
+  const description = document.getElementById('descInput').value.trim();
+
+  if (!title || !price){
+    formMsg.textContent = 'Заполните название и цену.';
+    return;
+  }
+
+  const newProduct = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
+    title, price, category, description,
+    photo: pendingPhoto,
+    createdAt: Date.now()
+  };
+
+  formMsg.textContent = 'Публикуем…';
+  products.push(newProduct);
+  render();
+  productForm.reset();
+  resetPhoto();
+
+  let saved = false;
+  try{
+    saved = await saveProducts();
+  }catch(err){
+    saved = false;
+  }
+
+  if (saved){
+    formMsg.textContent = 'Сохранено — товар появился во вкладке «Одежда».';
+    setTimeout(() => { formMsg.textContent=''; addPanel.classList.remove('open'); toggleAdd.textContent = 'Админ · добавить товар'; }, 1100);
+  } else {
+    formMsg.textContent = 'Товар добавлен и виден прямо сейчас, но сохранить его на будущее не получилось в этом окне браузера.';
+  }
+});
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.getElementById('homeTab').classList.toggle('active', name === 'home');
+  document.getElementById('shopTab').classList.toggle('active', name === 'shop');
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+document.getElementById('goShop').addEventListener('click', () => switchTab('shop'));
+
+loadProducts();
+</script>
+</body>
+</html>
